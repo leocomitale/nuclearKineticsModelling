@@ -12,6 +12,8 @@
 //#include <boost/math/constants/constants.hpp>
 #include <cmath>
 
+// temp run parms
+#include "atdparms.hpp"
 
 //TODO: This typedef is unnecessary. The code in main.cpp should be updated to
 //use Vector straight. 
@@ -37,7 +39,7 @@ const float_T Duration = 160;         //duration in minutes
 const float_T Tau      = 1.0/4000.0; //time step in minutes
 
 // MT Parameters
-#define MT_numb_M 1000
+#define MT_numb_M __ATD_PARM_1__
 #define MT_numb_D 1000
 
 vec_T MT_Pos_M[MT_numb_M];
@@ -74,7 +76,7 @@ float_T Pr_rescue      = 1-exp(-kr*Tau);
 
 
 //   Force Parameters
-const float_T F_MT_pull   = 1.0; //Force per MT in pN.
+const float_T F_MT_pull   = __ATD_PARM_2__; //Force per MT in pN.
 const float_T F_MT_push   = 1.0; //Force per MT in pN.
 
 const float_T Fratio = 1.0;// Env. killing: 0.32299363312512985;
@@ -87,7 +89,8 @@ float_T torque;
 
 
 //   Envelope Parameters
-const float_T envWidthM = 2*pi/3;
+//const float_T envWidthM = 2*pi/3;
+const float_T envWidthM = __ATD_PARM_3__;
 const float_T envelopeM[2] = {pi/2.0 - envWidthM/2.0, pi/2.0 + envWidthM/2.0}; // The envelope in which MTs from M can grow. 
 const float_T envWidthD = 2*pi/3;
 const float_T envelopeD[2] = {pi/2.0 - envWidthD/2.0, pi/2.0 + envWidthD/2.0}; // The envelope in which MTs from M can grow.
@@ -145,20 +148,21 @@ vec_T proNucPos;
 //    vector, as it is broken up into regions, not enpoints of regions. 
 
 //No Bands:
-const int numRegions = 1;
-const float_T regionAngles[numRegions + 1] = {0, 2*pi};
-const float_T regionProbabilities[numRegions] = {1};
-const float_T regionForceMultipliers[numRegions] = {1};
+//const int numRegions = 1;
+//const float_T regionAngles[numRegions + 1] = {0, 2*pi};
+//const float_T regionProbabilities[numRegions] = {1};
+//const float_T regionForceMultipliers[numRegions] = {1};
 
 //Standard Bands:
-//const int numRegions = 5;
+const int numRegions = 5;
 //const float_T width = pi/8;
-//const float_T centerPos = 1.24287;
-//const float_T start = centerPos - width/2.0;
-//const float_T end = centerPos + width/2.0;
-//const float_T regionAngles[numRegions+1] = {0, start, end, 2*pi - end, 2*pi - start, 2*pi};
-//const float_T regionProbabilities[numRegions] = {1,1,1,1,1};
-//const float_T regionForceMultipliers[numRegions] = {1,-1,1,-1,1};
+const float_T width = __ATD_PARM_4__;
+const float_T centerPos = 1.24287;
+const float_T start = centerPos - width/2.0;
+const float_T end = centerPos + width/2.0;
+const float_T regionAngles[numRegions+1] = {0, start, end, 2*pi - end, 2*pi - start, 2*pi};
+const float_T regionProbabilities[numRegions] = {1,1,1,1,1};
+const float_T regionForceMultipliers[numRegions] = {1,-1,1,-1,1};
 
 // MT density limitations
 //  Only one contact per window, windows of length ~1
